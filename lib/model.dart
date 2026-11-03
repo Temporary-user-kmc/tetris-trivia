@@ -1,7 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 Future<List> loadPosts() async {
-  String text = await rootBundle.loadString('assets/posts.json');
-  return jsonDecode(text);
+  var url = Uri.parse('https://temporary-user-kmc.github.io/tetris-trivia/posts.json');
+  var res = await http.get(url);
+  if (res.statusCode != 200) throw Exception('読み込み失敗');
+
+  List posts = jsonDecode(utf8.decode(res.bodyBytes));
+  return posts;
 }
